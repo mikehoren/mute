@@ -6,6 +6,14 @@ export function create(obj, original, parent = null, referenceKey = null) {
     return obj
   }
 
+  if(obj[PROXY_KEY]) {
+    const pxy = {}
+    for(let n in obj) {
+      pxy[n] = obj[n]
+    }
+    obj = pxy
+  }
+
   let _obj;
 
   const handler = {
@@ -30,10 +38,9 @@ export function create(obj, original, parent = null, referenceKey = null) {
     },
     set(obj, prop, value) {
       try {
-        obj[prop] = create(value, original, _obj, prop)
+        obj[prop] = create(value, original, obj, prop)
         if(parent && referenceKey) {
-          const t = unwrap(_obj)
-          parent[referenceKey] = t
+          parent[referenceKey] = unwrap(obj)
         }
       } catch(err) {
         return false
@@ -48,6 +55,27 @@ export function create(obj, original, parent = null, referenceKey = null) {
   _obj = new Proxy(obj, handler)
 
   return _obj
+
+}
+
+export function replace(obj) {
+  if(isPrimitive(obj) || isFunction(obj)) {
+    return obj
+  }
+
+  let _obj;
+
+  if(Array.isArray(obj)) {
+    _obj = obj.concat([])
+  } else {
+    let keys = obj[PROXY_KEY] ? Reflect.ownKeys(obj) : Object.keys(obj)
+    _obj = {}
+    keys.forEach( k => {
+      _obj[k] = obj[k]
+    })
+  }
+
+  return fromJS(_obj)
 
 }
 
@@ -68,7 +96,7 @@ export function unwrap(obj) {
       _obj[k] = unwrap(obj[k])
     })
   }
-  
+
   return _obj
 }
 

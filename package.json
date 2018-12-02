@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=production webpack --watch",
     "build": "cross-env NODE_ENV=production babel ./src --out-dir ./dist",
+    "build-example": "cross-env NODE_ENV=production webpack ./examples/example.jsx -o ./examples/build/example.js --watch",
     "test": "jest"
   },
   "babel": {
@@ -39,6 +40,10 @@
     "jest": "^23.6.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-redux": "^5.1.1",
+    "redux": "^4.0.1",
+    "redux-actions": "^2.6.4",
+    "reselect": "^4.0.0",
     "rimraf": "^2.6.2",
     "webpack": "^4.26.0",
     "webpack-cli": "^3.1.2"
