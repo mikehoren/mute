@@ -34,7 +34,7 @@ const reducer = handleActions({
   },
   [UPDATE_META]: (state, { payload }) => {
     const value = payload.value + 1
-    state.meta.name = `Info ${ value }`
+    state.meta.name = `Meta ${ value }`
     state.meta.value = value
     return replace(state)
   },
